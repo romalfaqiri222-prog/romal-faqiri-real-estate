@@ -2,6 +2,6 @@
   <rect width="512" height="512" rx="96" fill="#090909"/>
   <circle cx="256" cy="256" r="190" fill="none" stroke="#c9a227" stroke-width="14"/>
   <circle cx="256" cy="256" r="166" fill="none" stroke="#e0c36b" stroke-width="3" opacity=".65"/>
-  <text x="256" y="290" text-anchor="middle" font-family="Georgia,serif" font-size="150" font-weight="700" fill="#e0c36b">FR</text>
+  <text x="256" y="290" text-anchor="middle" font-family="Georgia,serif" font-size="150" font-weight="700" fill="#e0c36b">RF</text>
   <text x="256" y="350" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="700" letter-spacing="8" fill="#f5edd1">AFGHANISTAN</text>
 </svg>
