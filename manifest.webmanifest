@@ -1,13 +1,13 @@
 {
-  "name": "Romal Faqiri Real Estate",
-  "short_name": "Romal Real Estate",
+  "name": "Faqiri Real Estate Afghanistan",
+  "short_name": "Faqiri Real Estate",
   "lang": "fa-AF",
   "dir": "rtl",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f7f8fa",
-  "theme_color": "#0b1f3a",
+  "background_color": "#faf8f2",
+  "theme_color": "#090909",
   "description": "پلتفرم املاک افغانستان برای خرید، فروش، کرایه و مدیریت مشتریان",
   "categories": [
     "business",
