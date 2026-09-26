@@ -1,4 +1,4 @@
-const CACHE='romal-real-estate-v2';
+const CACHE='faqiri-real-estate-v3';
 const CORE=['/','/index.html','/manifest.webmanifest'];
 self.addEventListener('install',event=>{
   self.skipWaiting();
