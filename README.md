@@ -1,3 +1,3 @@
-# Romal Faqiri Real Estate
+# Faqiri Real Estate Afghanistan
 
-Afghanistan real-estate marketplace MVP. Dari RTL frontend backed by Supabase.
+Afghanistan real-estate marketplace and CRM platform in Dari RTL, backed by Supabase.
