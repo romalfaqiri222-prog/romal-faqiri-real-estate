@@ -1,4 +1,4 @@
-const CACHE='faqiri-real-estate-v4';
+const CACHE='rf-faqiri-real-estate-v5';
 const CORE=['/','/index.html','/manifest.webmanifest'];
 self.addEventListener('install',event=>{
   self.skipWaiting();
