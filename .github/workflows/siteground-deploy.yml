@@ -41,7 +41,7 @@ jobs:
           export SSH_ASKPASS_REQUIRE=force
           export DISPLAY=:0
           setsid ssh-add ~/.ssh/siteground </dev/null
-          EXPECTED_PUB="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIQAxJ6yeX7CpB690kdzJZlBFUJ5iW141KDhw5mgwKug"
+          EXPECTED_PUB="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIErzZMJTBLz44UAlcFV3smxdthD0yWs4LX0sr2gVEGIH"
           ACTUAL_PUB="$(ssh-keygen -y -f ~/.ssh/siteground)"
           if [ "$ACTUAL_PUB" != "$EXPECTED_PUB" ]; then
             echo "SSH_KEY_MISMATCH"
