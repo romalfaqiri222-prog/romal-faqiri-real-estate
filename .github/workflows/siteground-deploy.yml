@@ -1,0 +1,33 @@
+name: Deploy RF to SiteGround
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rf-siteground-production
+  cancel-in-progress: false
+
+jobs:
+  verify-ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare SSH key
+        shell: bash
+        env:
+          SG_SSH_KEY: ${{ secrets.SG_SSH_KEY }}
+          SG_HOST: ${{ secrets.SG_HOST }}
+          SG_PORT: ${{ secrets.SG_PORT }}
+          SG_USER: ${{ secrets.SG_USER }}
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SG_SSH_KEY" > ~/.ssh/siteground
+          chmod 600 ~/.ssh/siteground
+          ssh-keyscan -p "$SG_PORT" -H "$SG_HOST" >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/siteground -p "$SG_PORT" -o BatchMode=yes "$SG_USER@$SG_HOST" 'printf "RF_SSH_OK\n"; pwd; printf "HOME=%s\n" "$HOME"; if [ -d public_html ]; then printf "PUBLIC_HTML_FOUND\n"; else printf "PUBLIC_HTML_NOT_FOUND\n"; fi'
+
+# Safety: this first workflow only verifies SSH and the target directory.
+# It intentionally does not upload, overwrite, delete, or deploy any site files.
