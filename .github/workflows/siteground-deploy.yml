@@ -14,10 +14,11 @@ jobs:
   verify-ssh:
     runs-on: ubuntu-latest
     steps:
-      - name: Prepare SSH key
+      - name: Prepare SSH key and verify connection
         shell: bash
         env:
           SG_SSH_KEY: ${{ secrets.SG_SSH_KEY }}
+          SG_SSH_PASSPHRASE: ${{ secrets.SG_SSH_PASSPHRASE }}
           SG_HOST: ${{ secrets.SG_HOST }}
           SG_PORT: ${{ secrets.SG_PORT }}
           SG_USER: ${{ secrets.SG_USER }}
@@ -27,7 +28,19 @@ jobs:
           printf '%s\n' "$SG_SSH_KEY" > ~/.ssh/siteground
           chmod 600 ~/.ssh/siteground
           ssh-keyscan -p "$SG_PORT" -H "$SG_HOST" >> ~/.ssh/known_hosts
-          ssh -i ~/.ssh/siteground -p "$SG_PORT" -o BatchMode=yes "$SG_USER@$SG_HOST" 'printf "RF_SSH_OK\n"; pwd; printf "HOME=%s\n" "$HOME"; if [ -d public_html ]; then printf "PUBLIC_HTML_FOUND\n"; else printf "PUBLIC_HTML_NOT_FOUND\n"; fi'
 
-# Safety: this first workflow only verifies SSH and the target directory.
-# It intentionally does not upload, overwrite, delete, or deploy any site files.
+          eval "$(ssh-agent -s)"
+          ASKPASS_DIR="$(mktemp -d)"
+          trap 'rm -rf "$ASKPASS_DIR"; ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          cat > "$ASKPASS_DIR/askpass.sh" <<'EOF'
+          #!/usr/bin/env sh
+          printf '%s\n' "$SG_SSH_PASSPHRASE"
+          EOF
+          chmod 700 "$ASKPASS_DIR/askpass.sh"
+          export SSH_ASKPASS="$ASKPASS_DIR/askpass.sh"
+          export SSH_ASKPASS_REQUIRE=force
+          export DISPLAY=:0
+          setsid ssh-add ~/.ssh/siteground </dev/null
+          ssh -p "$SG_PORT" -o BatchMode=yes "$SG_USER@$SG_HOST" 'printf "RF_SSH_OK\n"; pwd; printf "HOME=%s\n" "$HOME"; if [ -d public_html ]; then printf "PUBLIC_HTML_FOUND\n"; else printf "PUBLIC_HTML_NOT_FOUND\n"; fi'
+
+# Safety: verification only. No files are uploaded, overwritten, or deleted.
