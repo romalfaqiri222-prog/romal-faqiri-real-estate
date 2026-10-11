@@ -41,6 +41,13 @@ jobs:
           export SSH_ASKPASS_REQUIRE=force
           export DISPLAY=:0
           setsid ssh-add ~/.ssh/siteground </dev/null
+          EXPECTED_PUB="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIQAxJ6yeX7CpB690kdzJZlBFUJ5iW141KDhw5mgwKug"
+          ACTUAL_PUB="$(ssh-keygen -y -f ~/.ssh/siteground)"
+          if [ "$ACTUAL_PUB" != "$EXPECTED_PUB" ]; then
+            echo "SSH_KEY_MISMATCH"
+            exit 42
+          fi
+          echo "SSH_KEY_MATCH"
           ssh -p "$SG_PORT" -o BatchMode=yes "$SG_USER@$SG_HOST" 'printf "RF_SSH_OK\n"; pwd; printf "HOME=%s\n" "$HOME"; if [ -d public_html ]; then printf "PUBLIC_HTML_FOUND\n"; else printf "PUBLIC_HTML_NOT_FOUND\n"; fi'
 
 # Safety: verification only. No files are uploaded, overwritten, or deleted.
